@@ -1,7 +1,0 @@
-flask
-requests
-numpy
-dlib
-face_recognition
-Pillow
-pymongo
