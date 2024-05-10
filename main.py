@@ -6,8 +6,8 @@ from PIL import Image
 from io import BytesIO
 from pymongo import MongoClient
 import threading
-import time
 import os
+import time
 
 app = Flask(__name__)
 
@@ -15,6 +15,7 @@ match_set = set()
 lock = threading.Lock()
 
 MONGO_URI = os.environ.get("MONGO_URI", "mongodb+srv://newUser:TXk.ch28bNCds5c@cluster0.ir11p5g.mongodb.net/lostcal")
+CLEAR_INTERVAL = 3600
 
 
 def compare_faces(image1_url, image2_url):
@@ -60,14 +61,22 @@ def fetch_data_from_mongo(collection, field_name):
 
 def compare_images():
     client = MongoClient(MONGO_URI)
-    db = client['People']
+    db = client['lostcal']
     collection_lost = db['missingpepoles']
     collection_found = db['lostpepoles']
     while True:
         lost_list = fetch_data_from_mongo(collection_lost, "img")
         found_list = fetch_data_from_mongo(collection_found, "img")
         compare(lost_list, found_list)
-        time.sleep(60)
+
+
+def clear_match_set():
+    global match_set
+    while True:
+        time.sleep(CLEAR_INTERVAL)
+        with lock:
+            match_set.clear()
+            print("Match set cleared!")
 
 
 @app.get("/")
@@ -86,4 +95,9 @@ if __name__ == "__main__":
     comparison_thread = threading.Thread(target=compare_images)
     comparison_thread.daemon = True
     comparison_thread.start()
+
+    clear_match_set_thread = threading.Thread(target=clear_match_set)
+    clear_match_set_thread.daemon = True
+    clear_match_set_thread.start()
+
     app.run(host="0.0.0.0", port=8080, debug=False)
