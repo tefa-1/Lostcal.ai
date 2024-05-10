@@ -3,7 +3,6 @@ from pymongo import MongoClient
 import requests
 from io import BytesIO
 from PIL import Image, ImageTk
-import time
 
 
 class PhotoSliderApp:

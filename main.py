@@ -69,6 +69,11 @@ def compare_images():
         time.sleep(60)  # Adjust the time interval as needed
 
 
+@app.get("/")
+def home():
+    return {"health_check": "OK", "model_version": "1.0"}
+
+
 @app.route('/matches', methods=['GET'])
 def get_matches():
     global match_set
@@ -80,5 +85,4 @@ if __name__ == "__main__":
     comparison_thread = threading.Thread(target=compare_images)
     comparison_thread.daemon = True
     comparison_thread.start()
-
     app.run(host="0.0.0.0", port=8080, debug=False)
