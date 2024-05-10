@@ -14,7 +14,8 @@ app = Flask(__name__)
 match_set = set()
 lock = threading.Lock()
 
-MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017/")
+MONGO_URI = os.environ.get("MONGO_URI", "mongodb+srv://newUser:TXk.ch28bNCds5c@cluster0.ir11p5g.mongodb.net/lostcal")
+
 
 def compare_faces(image1_url, image2_url):
     try:
@@ -60,13 +61,13 @@ def fetch_data_from_mongo(collection, field_name):
 def compare_images():
     client = MongoClient(MONGO_URI)
     db = client['People']
-    collection_lost = db['Personal Information']
-    collection_found = db['Found']
+    collection_lost = db['missingpepoles']
+    collection_found = db['lostpepoles']
     while True:
-        lost_list = fetch_data_from_mongo(collection_lost, "Images")
-        found_list = fetch_data_from_mongo(collection_found, "Image")
+        lost_list = fetch_data_from_mongo(collection_lost, "img")
+        found_list = fetch_data_from_mongo(collection_found, "img")
         compare(lost_list, found_list)
-        time.sleep(60)  # Adjust the time interval as needed
+        time.sleep(60)
 
 
 @app.get("/")
