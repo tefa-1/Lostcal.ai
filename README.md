@@ -44,4 +44,4 @@ curl http://localhost:8080/
 4.	Retrieve face match results:
 curl http://localhost:8080/matches
 Conclusion
-This project provides a web service for face recognition, continuously comparing faces from MongoDB collections and exposing match results through a REST API. It can be extended and customized further based on specific requirements.
+This project provides a web service for face recognition, continuously comparing faces from MongoDB collections and exposing match results through a REST API. It can be extended and customized further based on specific requirements
